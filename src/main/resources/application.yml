@@ -1,0 +1,12 @@
+# DataSource Config
+spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:mysql://127.0.0.1:3306/dev
+    username: root
+    password: 123456
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    timeout: 200
+    database: 10
