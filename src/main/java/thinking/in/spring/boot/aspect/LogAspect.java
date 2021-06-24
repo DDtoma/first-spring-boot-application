@@ -1,5 +1,6 @@
 package thinking.in.spring.boot.aspect;
 
+import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -24,10 +25,10 @@ public class LogAspect {
 
     @Before("pointCut()")
     public void doBefore(JoinPoint jp) {
-//        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-//        javax.servlet.http.HttpServletRequest request = requestAttributes.getRequest();
-//        String methodName = request.getMethod();
-//        log.info("{}", methodName);
-//        System.out.println("aspect doBefore");
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        javax.servlet.http.HttpServletRequest request = requestAttributes.getRequest();
+        String methodName = request.getMethod();
+        Object[] args = jp.getArgs();
+        log.info("\n{}: {}\nargs: {}", methodName, request.getRequestURI(), JSONUtil.toJsonStr(args));
     }
 }
