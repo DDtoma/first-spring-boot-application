@@ -1,4 +1,4 @@
-package thinking.in.spring.boot.config;
+package thinking.in.spring.boot.common;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
@@ -13,9 +13,7 @@ import java.io.ByteArrayOutputStream;
 public class KryoRedisSerializer<T> implements RedisSerializer<T> {
 
     public static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
-
     private static final ThreadLocal<Kryo> kryos = ThreadLocal.withInitial(Kryo::new);
-
     private Class<T> clazz;
 
     public KryoRedisSerializer(Class<T> clazz) {
@@ -28,11 +26,9 @@ public class KryoRedisSerializer<T> implements RedisSerializer<T> {
         if (t == null) {
             return EMPTY_BYTE_ARRAY;
         }
-
         Kryo kryo = kryos.get();
         kryo.setReferences(false);
         kryo.register(clazz);
-
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
              Output output = new Output(baos)) {
             kryo.writeClassAndObject(output, t);
@@ -41,7 +37,6 @@ public class KryoRedisSerializer<T> implements RedisSerializer<T> {
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
-
         return EMPTY_BYTE_ARRAY;
     }
 
@@ -50,17 +45,14 @@ public class KryoRedisSerializer<T> implements RedisSerializer<T> {
         if (bytes == null || bytes.length <= 0) {
             return null;
         }
-
         Kryo kryo = kryos.get();
         kryo.setReferences(false);
         kryo.register(clazz);
-
         try (Input input = new Input(bytes)) {
             return (T) kryo.readClassAndObject(input);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
-
         return null;
     }
 }
